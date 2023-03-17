@@ -10,8 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 0) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_17_210054) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "notifications", force: :cascade do |t|
+    t.boolean "should_forward"
+    t.bigint "payload_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payload_id"], name: "index_notifications_on_payload_id"
+  end
+
+  create_table "payloads", force: :cascade do |t|
+    t.string "record_type"
+    t.string "type"
+    t.integer "type_code"
+    t.string "name"
+    t.string "tag"
+    t.string "message_stream"
+    t.text "description"
+    t.string "email"
+    t.string "from"
+    t.datetime "bouncedAt"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "notifications", "payloads"
 end
